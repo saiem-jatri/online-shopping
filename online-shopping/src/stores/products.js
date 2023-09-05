@@ -13,7 +13,6 @@ export const productsStore = defineStore('products', {
                 .then(res => res.json())
                 .then(json => {
                     this.products = json.products;
-                    console.log("proucts====>",this.products)
                 })
         }
 
