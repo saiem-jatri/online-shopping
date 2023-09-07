@@ -21,9 +21,9 @@ const gotoDetails =(id)=>{
 </script>
 
 <template>
-  <div style="width: 100%">
-    <div class="products-list" style="display: grid; width: 100%">
-      <div class="product" v-for="item in props.productData" :key="item.id">
+  <div style="width: 100%;">
+    <div style="display: grid; grid-column: 4">
+      <div class="" v-for="item in props.productData" :key="item.id">
         <img :src="item.thumbnail" alt="">
         <h2>Brand: {{item.brand}}</h2>
         <h2>Description: {{item.description}}</h2>

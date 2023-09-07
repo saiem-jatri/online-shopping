@@ -7,7 +7,7 @@ export default defineComponent({
 </script>
 
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, onUnmounted} from "vue";
 import { productsStore } from "@/stores/products";
 import router from "../router";
 
@@ -15,6 +15,9 @@ const store = productsStore()
 
 onMounted(async () => {
   await store.fetchProductsFromDB()
+})
+onUnmounted(()=>{
+  localStorage.setItem('items', JSON.stringify(store.products));
 })
 </script>
 
