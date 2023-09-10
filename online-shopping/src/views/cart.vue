@@ -55,9 +55,8 @@ const reduceOneItem = (item)=>{
         v-for="item in store.cart"
         :key="item.id"
     >
-      {{item.quantity}}
       <div style="position: relative;" class="item-details">
-        <p v-if="item.quantity > 1" class="badge" style="position: absolute; right: 10px; top: 2px">{{ item.quantity }}</p>
+        <p class="badge" style="position: absolute; right: 10px; top: 2px">{{ item.quantity }}</p>
         <img :src="item.thumbnail" alt="">
         <span>Brand: {{ item.brand }}</span>
         <span>Category: {{ item.category }}</span>
