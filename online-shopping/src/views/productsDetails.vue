@@ -29,32 +29,43 @@ const addToCart = ()=>{
 
 <template>
   <div class="backButton">
-      <router-link to="/">Back to catalog</router-link>
+      <router-link style="text-decoration: none; color: white; text-align: center" to="/"> Back to catalog</router-link>
   </div>
   <div class="product">
+    <div class="">
       <div class="product-image" style="width: 50%">
-        <img :src="singleItem.thumbnail" alt="">
+        <img style="height: 100%; width: 100%" :src="singleItem.thumbnail" alt="">
       </div>
-    <div class="product-details" style="width: 430px">
-      <p>Brand : {{ singleItem.brand }}</p>
-      <p>Description : {{ singleItem.description }}</p>
-      <p>Price : {{ singleItem.price }}</p>
+      <div class="product-details" style="width: 430px">
+        <p style="font-weight: 600; font-size: 20px">Brand : {{ singleItem.brand }}</p>
+        <p style="font-weight: 500; font-size: 16px">Description : {{ singleItem.description }}</p>
+        <p style="font-weight: 600; font-size: 20px">Price : {{ singleItem.price }}</p>
+        <div style="width: 100%; display: flex; align-items: center">
+          <button @click="addToCart()" style="background-color: #f04935; color: white; cursor: pointer; height: 30px; width: 120px; border: none">Add to cart</button>
+        </div>
+      </div>
     </div>
   </div>
-  <div style="width: 100%; display: flex; justify-content: center; align-items: center">
-    <button @click="addToCart()" style="background-color: green; color: white; padding: 10px; border-radius: 10%; cursor: pointer; height: 60px; width: 120px">Add to cart</button>
-  </div>
+
+
 </template>
 <style scoped>
-.product {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
+.backButton{
+  font-size: 12px;
+  background-color: #181818;
+  width: 90px;
+  text-align: center;
+  padding: 5px;
 }
+.product{
+  display: flex;
+  justify-content: center;
+  border: 1px solid black;
+  padding: 10px;
+  margin-top: 10px;
+}
+.product-details{
 
-.product-image {
-  margin-right: 24px;
 }
 
 </style>
