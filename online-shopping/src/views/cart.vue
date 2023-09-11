@@ -7,20 +7,41 @@ export default defineComponent({
 <script setup>
 import { productsStore } from "../stores/products.js";
 import {useRoute, useRouter} from "vue-router"
+import { StripeCheckout } from '@vue-stripe/vue-stripe';
+import {computed, ref} from 'vue'
+
+
 const store = productsStore()
 const router = useRouter()
-import {computed} from 'vue'
+
+let publishableKey = "pk_test_51NoldTDDu6fhloMsg9DUJjgaWJ1xWozDeSr9Kar2pwG2ctmBoQU3fUgFIbHOYrwtdpUVhoJi9DsZYyDV2bX3HRPX006bchhEza"
+let loading = false
+ let lineItems = [
+  {
+    price: 'price_1NosC7DDu6fhloMs86DTj3hX', // The id of the one-time price you created in your Stripe dashboard
+    quantity: 1,
+  },
+]
+let successURL = 'http://localhost:5173/success'
+let cancelURL = 'http://localhost:5173/error'
+const checkoutRef = ref(null);
+
+const redirectToCheckout = () => {
+  if (checkoutRef.value && checkoutRef.value.redirectToCheckout) {
+    checkoutRef.value.redirectToCheckout();
+  } else {
+    // Handle the case where checkoutRef is not available or doesn't have redirectToCheckout
+    console.error('checkoutRef is not available or does not have redirectToCheckout method');
+  }
+};
+const submit = () => {
+  redirectToCheckout();
+};
 
 const removeFromStoreCart = (id)=>{
-  console.log("id=========>",id)
   // store.cart = store.cart.filter((item) => item.id !== id)
   store.removeFromCart(id)
 }
-// const addOneItem = (id)=>{
-//   console.log(id)
-//   let pushItem = store.cart.filter((item)=> item.id === id)
-//   pushItem[0].price = pushItem[0].price * 2
-// }
 const allData = JSON.parse(localStorage.getItem('items'));
 const singleItem = computed(()=>{
   return allData.find((item)=> item.id === Number(route.params.id))
@@ -69,6 +90,18 @@ const reduceOneItem = (item)=>{
     <div class="article">
       <p class="example-left" >Approximate Total Cost : {{totalsSum}}</p>
     </div>
+  </div>
+  <div v-if="store.cart.length">
+    <stripe-checkout
+        ref="checkoutRef"
+        mode="payment"
+        :pk="publishableKey"
+        :line-items="lineItems"
+        :success-url="successURL"
+        :cancel-url="cancelURL"
+        @loading="v => loading = v"
+    />
+    <button @click="submit">Pay now!</button>
   </div>
 </template>
 <style scoped>
