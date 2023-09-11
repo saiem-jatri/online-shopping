@@ -9,19 +9,20 @@ import { productsStore } from "../stores/products.js";
 import {useRoute, useRouter} from "vue-router"
 import axios from 'axios';
 import StripeCheckout from 'vue-stripe-checkout';
+import {CREATE_CHECKOUT_SESSION} from '../action-type.js'
 const store = productsStore()
 const router = useRouter()
 import {computed, ref} from 'vue'
 const publishableKey = 'pk_test_51NoldTDDu6fhloMsg9DUJjgaWJ1xWozDeSr9Kar2pwG2ctmBoQU3fUgFIbHOYrwtdpUVhoJi9DsZYyDV2bX3HRPX006bchhEza'
-const session = ref({})
+// const session = ref(null)
 
 
 const checkout = async ()=>{
   try {
     const amount = totalsSum.value; // Amount in cents
-    const response = await axios.post('http://localhost:3001/create-payment-intent', { amount });
-    session.value = {  ...response.data };
-    this.$refs.checkoutRef.redirectToCheckout();
+    const response = await axios.post('http://localhost:3005/create-checkout-session',amount);
+    // session.value = response.data
+    console.log(response.data)
   } catch (error) {
     console.error('Error:', error);
   }
@@ -32,6 +33,20 @@ const onSuccess = ()=>{
 const onError = ()=>{
   console.log('Payment failed!');
 }
+
+// const checkoutRef = ref(null);
+//
+// const redirectToCheckout = () => {
+//   if (checkoutRef.value && checkoutRef.value.redirectToCheckout) {
+//     checkoutRef.value.redirectToCheckout();
+//   } else {
+//     // Handle the case where checkoutRef is not available or doesn't have redirectToCheckout
+//     console.error('checkoutRef is not available or does not have redirectToCheckout method');
+//   }
+// };
+// const submit = () => {
+//   redirectToCheckout();
+// };
 
 
 const removeFromStoreCart = (id)=>{
@@ -68,13 +83,14 @@ const reduceOneItem = (item)=>{
 <template>
   <div id="app">
     <h1>Vue.js Stripe Integration</h1>
-    <StripeCheckout
-        ref="checkoutRef"
-        :pk="publishableKey"
-        :session="session"
-        @success="onSuccess"
-        @error="onError"
-    ></StripeCheckout>
+<!--    <StripeCheckout-->
+<!--        ref="checkoutRef"-->
+<!--        :pk="publishableKey"-->
+<!--        :session="session"-->
+<!--        @success="onSuccess"-->
+<!--        @error="onError"-->
+<!--    ></StripeCheckout>-->
+<!--    <iframe :srcdoc="session"></iframe>-->
     <button @click="checkout">Pay</button>
   </div>
   <div class="backButton" style="margin-bottom: 20px">

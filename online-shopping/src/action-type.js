@@ -1,0 +1,1 @@
+export const CREATE_CHECKOUT_SESSION = "http://localhost:3005/create-checkout-session";
