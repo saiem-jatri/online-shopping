@@ -7,9 +7,32 @@ export default defineComponent({
 <script setup>
 import { productsStore } from "../stores/products.js";
 import {useRoute, useRouter} from "vue-router"
+import axios from 'axios';
+import StripeCheckout from 'vue-stripe-checkout';
 const store = productsStore()
 const router = useRouter()
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
+const publishableKey = 'pk_test_51NoldTDDu6fhloMsg9DUJjgaWJ1xWozDeSr9Kar2pwG2ctmBoQU3fUgFIbHOYrwtdpUVhoJi9DsZYyDV2bX3HRPX006bchhEza'
+const session = ref({})
+
+
+const checkout = async ()=>{
+  try {
+    const amount = totalsSum.value; // Amount in cents
+    const response = await axios.post('http://localhost:3001/create-payment-intent', { amount });
+    session.value = {  ...response.data };
+    this.$refs.checkoutRef.redirectToCheckout();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+const onSuccess = ()=>{
+  console.log('Payment successful!');
+}
+const onError = ()=>{
+  console.log('Payment failed!');
+}
+
 
 const removeFromStoreCart = (id)=>{
   console.log("id=========>",id)
@@ -43,6 +66,17 @@ const reduceOneItem = (item)=>{
 </script>
 
 <template>
+  <div id="app">
+    <h1>Vue.js Stripe Integration</h1>
+    <StripeCheckout
+        ref="checkoutRef"
+        :pk="publishableKey"
+        :session="session"
+        @success="onSuccess"
+        @error="onError"
+    ></StripeCheckout>
+    <button @click="checkout">Pay</button>
+  </div>
   <div class="backButton" style="margin-bottom: 20px">
     <router-link style="text-decoration: none; color: white; text-align: center" to="/"> Back to catalog</router-link>
   </div>
